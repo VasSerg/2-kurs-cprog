@@ -1,7 +1,7 @@
 ﻿#include<iostream>
 
 using namespace std;
-//проблема при выборе между int и double
+//проблема при выборе между float и double
 void f(float i) {};
 void f(double i) {};
 
