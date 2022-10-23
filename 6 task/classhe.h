@@ -20,23 +20,16 @@ public:
 
     explicit fract(float r)
     {
-        fract temp;
-        int tt = r * 10000000000000;
-        temp.num = tt;
-        temp.denom = 10000000000000;
-        temp = contract(temp);
-        num = temp.num;
-        denom = temp.denom;
+        int tt = ceil(1000000 * r);
+        num = tt;
+        denom = 1000000;
     }
     explicit fract(double r)
     {
         fract temp;
-        int tt = r * 10000000000000;
-        temp.num = tt;
-        temp.denom = 10000000000000;
-        temp = contract(temp);
-        num = temp.num;
-        denom = temp.denom;
+        int tt = r * 1000000;
+        num = tt;
+        denom = 1000000;
     }
 
     void set(int r, int i);

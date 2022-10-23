@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 
     //сравнение    
     cout << "a > b" << endl;
-    cout << (a>b) << endl;
+    cout << (a > b) << endl;
     cout << endl;
     cout << "a < b" << endl;
     cout << (a < b) << endl;
@@ -101,16 +101,16 @@ int main(int argc, char* argv[])
 
     fract g(4, 8);
     g.Show();
-    /*
     double dob = 8.2342346;
     fract r(dob);
+    r = r.contract(r);
     r.Show();
     float fl = 3.42356f;
     fract tem = (fract)fl;
+    tem = tem.contract(tem);
     tem.Show();
     a = b + (fract)fl;
     a.Show();
-    */
 
 
     //критические случаи
