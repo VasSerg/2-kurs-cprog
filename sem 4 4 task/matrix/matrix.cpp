@@ -32,7 +32,7 @@ class Matrix {
         return p[x][y];
     }
 
-    void sett(int x, int y, int num){
+    void sett(int x, int y, double num){
         p[x][y] = num;
     }
 
