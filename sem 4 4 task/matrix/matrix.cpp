@@ -1,15 +1,16 @@
 #include <iostream>
 #pragma once
 #include <cassert>
+
 using namespace std;
 
-template<typename T=int>
+template<typename T, int MaxRrows, int MaxCols>
 class Matrix {
     public:
-        int MaxRrows, MaxCols;
         T **p;
 
-    Matrix(int rows, int cols) : MaxRrows(rows), MaxCols(cols)
+
+    Matrix()
     {
         allocSpace();
         for (int i = 0; i < MaxRrows; ++i) {
@@ -29,7 +30,7 @@ class Matrix {
         }
     }
 
-    double& operator()(int x, int y){
+    T& operator()(int x, int y){
         return p[x][y];
     }
 
@@ -45,7 +46,7 @@ class Matrix {
         delete[] p;
     }
 
-    Matrix(const Matrix& m) : MaxRrows(m.MaxRrows), MaxCols(m.MaxCols)
+    Matrix<T,MaxRrows,MaxCols>(const Matrix<T,MaxRrows,MaxCols>& m)
     {
         allocSpace();
         for (int i = 0; i < MaxRrows; ++i) {
@@ -56,16 +57,12 @@ class Matrix {
     }
 
 
-    Matrix& operator=(const Matrix& m)
+    Matrix<T,MaxRrows,MaxCols>& operator=(const Matrix<T,MaxRrows,MaxCols>& m)
     {
         if (this == &m) {
             return *this;
         }
-        assert(MaxRrows == m.MaxRrows);
-        assert(MaxCols == m.MaxCols);
 
-        MaxRrows = m.MaxRrows;
-        MaxCols = m.MaxCols;
         allocSpace();
 
         for (int i = 0; i < MaxRrows; ++i) {
@@ -76,11 +73,9 @@ class Matrix {
         return *this;
     }
 
-    Matrix operator+(const Matrix& m)
+    Matrix<T,MaxRrows,MaxCols> operator+(const Matrix<T,MaxRrows,MaxCols>& m)
     {
-        assert(MaxRrows == m.MaxRrows);
-        assert(MaxCols == m.MaxCols);
-        Matrix<T> r(MaxRrows,MaxCols);
+        Matrix<T,MaxRrows,MaxCols> r;
         for (int i = 0; i < MaxRrows; ++i) {
             for (int j = 0; j < MaxCols; ++j) {
                 r.p[i][j] = p[i][j] + m.p[i][j];
@@ -89,11 +84,9 @@ class Matrix {
         return move(r);
     }
 
-    Matrix operator-(const Matrix& m)
+    Matrix<T,MaxRrows,MaxCols> operator-(const Matrix<T,MaxRrows,MaxCols>& m)
     {
-        assert(MaxRrows == m.MaxRrows);
-        assert(MaxCols == m.MaxCols);
-        Matrix<T> r(MaxRrows,MaxCols);
+        Matrix<T,MaxRrows,MaxCols> r;
         for (int i = 0; i < MaxRrows; ++i) {
             for (int j = 0; j < MaxCols; ++j) {
                 r.p[i][j] = p[i][j] - m.p[i][j];
@@ -102,13 +95,13 @@ class Matrix {
         return move(r);
     }
 
-    Matrix operator*(const Matrix& m)
+    template< int MaxRrows1, int MaxCols1>
+    Matrix<T,MaxRrows,MaxCols> operator*(const Matrix<T,MaxRrows1,MaxCols1>& m)
     {
-        assert(MaxCols == m.MaxRrows);
-        Matrix<T> r(MaxRrows,m.MaxCols);
-        for (int i = 0; i < r.MaxRrows; ++i) {
-            for (int j = 0; j < r.MaxCols; ++j) {
-                for (int k = 0; k < MaxCols; ++k) {
+        Matrix<T,MaxRrows,MaxCols1> r;
+        for (int i = 0; i < MaxRrows; ++i) {
+            for (int j = 0; j < MaxCols1; ++j) {
+                for (int k = 0; k < MaxCols1; ++k) {
                     r.p[i][j] += (p[i][k] * m.p[k][j]);
                 }
             }
