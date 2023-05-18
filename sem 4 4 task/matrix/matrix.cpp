@@ -3,10 +3,11 @@
 #include <cassert>
 using namespace std;
 
+template<typename T=int>
 class Matrix {
     public:
         int MaxRrows, MaxCols;
-        double **p;
+        T **p;
 
     Matrix(int rows, int cols) : MaxRrows(rows), MaxCols(cols)
     {
@@ -32,7 +33,7 @@ class Matrix {
         return p[x][y];
     }
 
-    void sett(int x, int y, double num){
+    void sett(int x, int y, T num){
         p[x][y] = num;
     }
 
@@ -54,18 +55,14 @@ class Matrix {
         }
     }
 
+
     Matrix& operator=(const Matrix& m)
     {
         if (this == &m) {
             return *this;
         }
-
         assert(MaxRrows == m.MaxRrows);
         assert(MaxCols == m.MaxCols);
-        for (int i = 0; i < MaxRrows; ++i) {
-            delete[] p[i];
-        }
-        delete[] p;
 
         MaxRrows = m.MaxRrows;
         MaxCols = m.MaxCols;
@@ -83,7 +80,7 @@ class Matrix {
     {
         assert(MaxRrows == m.MaxRrows);
         assert(MaxCols == m.MaxCols);
-        Matrix r(MaxRrows,MaxCols);
+        Matrix<T> r(MaxRrows,MaxCols);
         for (int i = 0; i < MaxRrows; ++i) {
             for (int j = 0; j < MaxCols; ++j) {
                 r.p[i][j] = p[i][j] + m.p[i][j];
@@ -96,7 +93,7 @@ class Matrix {
     {
         assert(MaxRrows == m.MaxRrows);
         assert(MaxCols == m.MaxCols);
-        Matrix r(MaxRrows,MaxCols);
+        Matrix<T> r(MaxRrows,MaxCols);
         for (int i = 0; i < MaxRrows; ++i) {
             for (int j = 0; j < MaxCols; ++j) {
                 r.p[i][j] = p[i][j] - m.p[i][j];
@@ -107,9 +104,8 @@ class Matrix {
 
     Matrix operator*(const Matrix& m)
     {
-        assert(MaxRrows == m.MaxRrows);
-        assert(MaxCols == m.MaxCols);
-        Matrix r(MaxRrows,MaxCols);
+        assert(MaxCols == m.MaxRrows);
+        Matrix<T> r(MaxRrows,m.MaxCols);
         for (int i = 0; i < r.MaxRrows; ++i) {
             for (int j = 0; j < r.MaxCols; ++j) {
                 for (int k = 0; k < MaxCols; ++k) {
@@ -122,11 +118,10 @@ class Matrix {
 
     void allocSpace()
     {
-        p = new double*[MaxRrows];
+        p = new T*[MaxRrows];
         for (int i = 0; i < MaxRrows; ++i) {
-            p[i] = new double[MaxCols];
+            p[i] = new T[MaxCols];
         }
     }
 };
-
 
