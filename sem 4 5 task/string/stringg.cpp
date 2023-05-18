@@ -1,6 +1,6 @@
 #include <iostream>
 #pragma once
-#include <cassert>]
+#include <cassert>
 #include <cstring>
 using namespace std;
 
