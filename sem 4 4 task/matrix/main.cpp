@@ -5,26 +5,26 @@
 using namespace std;
 
 
-template<typename T=int>
-Matrix<T> Transpose(Matrix<T> m)
+template<typename T, int MaxRrows, int MaxCols>
+Matrix<T,MaxRrows,MaxCols> Transpose(Matrix<T,MaxRrows,MaxCols>&& m)
 {
-    Matrix<T> r(m.MaxCols, m.MaxRrows);
-    for (int i = 0; i < m.MaxRrows; ++i) {
-        for (int j = 0; j < m.MaxCols; ++j) {
+    Matrix<T,MaxRrows,MaxCols> r;
+    for (int i = 0; i < MaxRrows; ++i) {
+        for (int j = 0; j < MaxCols; ++j) {
             r.p[j][i] = m.p[i][j];
         }
     }
-    return move(r);
+    return r;
 }
 
 int main(){
-    Matrix<int> a(2,2);
+    Matrix<int,2,2> a;
 
     a.sett(0,0,3);
     a.sett(1,0,1);
     a.sett(0,1,2);
 
-    Matrix<int> s(2,2);
+    Matrix<int,2,2> s;
 
     s.sett(0,0,2);
     s.sett(1,0,5);
@@ -36,7 +36,7 @@ int main(){
     cout << "Matrix s \n";
     s.print();
 
-    Matrix<int> d(2,2);
+    Matrix<int,2,2> d;
 
 
     d = a + s;
@@ -46,12 +46,12 @@ int main(){
     d = a * s;
     cout << "Matrix a * s \n";
     d.print();
-    a = Transpose(a);
+    a = Transpose(move(a));
     cout << "Matrix a Transposed \n";
     a.print();
 
-    Matrix<int> p(2,3);
-    d = a + p;
+    Matrix<int,2,3> p;
+    //d = a + p;
 
 
 
