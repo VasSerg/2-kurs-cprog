@@ -4,9 +4,11 @@
 
 using namespace std;
 
-Matrix&& Transpose(Matrix m)
+
+template<typename T=int>
+Matrix<T> Transpose(Matrix<T> m)
 {
-    Matrix r(m.MaxCols, m.MaxRrows);
+    Matrix<T> r(m.MaxCols, m.MaxRrows);
     for (int i = 0; i < m.MaxRrows; ++i) {
         for (int j = 0; j < m.MaxCols; ++j) {
             r.p[j][i] = m.p[i][j];
@@ -16,13 +18,13 @@ Matrix&& Transpose(Matrix m)
 }
 
 int main(){
-    Matrix a(2,2);
+    Matrix<int> a(2,2);
 
     a.sett(0,0,3);
     a.sett(1,0,1);
     a.sett(0,1,2);
 
-    Matrix s(2,2);
+    Matrix<int> s(2,2);
 
     s.sett(0,0,2);
     s.sett(1,0,5);
@@ -34,7 +36,7 @@ int main(){
     cout << "Matrix s \n";
     s.print();
 
-    Matrix d(2,2);
+    Matrix<int> d(2,2);
 
 
     d = a + s;
@@ -48,17 +50,10 @@ int main(){
     cout << "Matrix a Transposed \n";
     a.print();
 
-    Matrix p(2,3);
-    //выдаёт ассерт.
+    Matrix<int> p(2,3);
     d = a + p;
-    // Я пытался сделать проверку в compile time с помощью static_assert(),
-    //но для этого размеры матриц должны быть константы. Ну, можно конечно записать перед сложением:
-    //static_assert(a.MaxRrows != s.MaxRrows);
-    //static_assert(a.MaxCols != s.MaxCols);
-    // но тогда надо было всё делать const
 
 
 
     return 0;
 }
-
