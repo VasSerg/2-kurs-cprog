@@ -5,8 +5,8 @@
 using namespace std;
 
 
-template<typename T, int MaxRrows, int MaxCols>
-Matrix<T,MaxRrows,MaxCols> Transpose(Matrix<T,MaxRrows,MaxCols>&& m)
+template<typename T, int MaxRrows, int MaxCols,class allocSpace = alS<T>>
+Matrix<T,MaxRrows,MaxCols,allocSpace> Transpose(Matrix<T,MaxRrows,MaxCols,allocSpace>&& m)
 {
     Matrix<T,MaxRrows,MaxCols> r;
     for (int i = 0; i < MaxRrows; ++i) {
@@ -19,16 +19,16 @@ Matrix<T,MaxRrows,MaxCols> Transpose(Matrix<T,MaxRrows,MaxCols>&& m)
 
 int main(){
     Matrix<int,2,2> a;
-
-    a.sett(0,0,3);
-    a.sett(1,0,1);
-    a.sett(0,1,2);
+    a[0][0] = 1;
+    a[1][0] = 3;
+    a[0][1] = 2;
 
     Matrix<int,2,2> s;
 
-    s.sett(0,0,2);
-    s.sett(1,0,5);
-    s.sett(0,1,3);
+    s[0][0] = 1;
+    s[1][0] = 5;
+    s[0][1] = 3;
+
 
 
     cout << "Matrix a \n";
