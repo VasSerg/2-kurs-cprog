@@ -4,7 +4,22 @@
 
 using namespace std;
 
-template<typename T, int MaxRrows, int MaxCols>
+
+template <typename T>
+class alS{
+    public:
+    auto operator()(int MaxRrows, int MaxCols){
+        T **p;
+        p = new T*[MaxRrows];
+        for (int i = 0; i < MaxRrows; ++i) {
+            p[i] = new T[MaxCols];
+        }
+        return p;
+    }
+};
+
+
+template<typename T, int MaxRrows, int MaxCols, class allocSpace = alS<T>>
 class Matrix {
     public:
         T **p;
@@ -12,7 +27,7 @@ class Matrix {
 
     Matrix()
     {
-        allocSpace();
+        p = allocSpace()(MaxRrows,MaxCols);
         for (int i = 0; i < MaxRrows; ++i) {
             for (int j = 0; j < MaxCols; ++j) {
                 p[i][j] = 0;
@@ -30,12 +45,9 @@ class Matrix {
         }
     }
 
-    T& operator()(int x, int y){
-        return p[x][y];
-    }
 
-    void sett(int x, int y, T num){
-        p[x][y] = num;
+    T* operator[](int x){
+        return p[x];
     }
 
     ~Matrix()
@@ -46,9 +58,9 @@ class Matrix {
         delete[] p;
     }
 
-    Matrix<T,MaxRrows,MaxCols>(const Matrix<T,MaxRrows,MaxCols>& m)
+    Matrix<T,MaxRrows,MaxCols,allocSpace>(const Matrix<T,MaxRrows,MaxCols,allocSpace>& m)
     {
-        allocSpace();
+        allocSpace()(MaxRrows,MaxCols);
         for (int i = 0; i < MaxRrows; ++i) {
             for (int j = 0; j < MaxCols; ++j) {
                 p[i][j] = move(m.p[i][j]);
@@ -57,13 +69,13 @@ class Matrix {
     }
 
 
-    Matrix<T,MaxRrows,MaxCols>& operator=(const Matrix<T,MaxRrows,MaxCols>& m)
+    Matrix<T,MaxRrows,MaxCols,allocSpace>& operator=(const Matrix<T,MaxRrows,MaxCols,allocSpace>& m)
     {
         if (this == &m) {
             return *this;
         }
 
-        allocSpace();
+        allocSpace()(MaxRrows,MaxCols);
 
         for (int i = 0; i < MaxRrows; ++i) {
             for (int j = 0; j < MaxCols; ++j) {
@@ -73,7 +85,7 @@ class Matrix {
         return *this;
     }
 
-    Matrix<T,MaxRrows,MaxCols> operator+(const Matrix<T,MaxRrows,MaxCols>& m)
+    Matrix<T,MaxRrows,MaxCols,allocSpace> operator+(const Matrix<T,MaxRrows,MaxCols,allocSpace>& m)
     {
         Matrix<T,MaxRrows,MaxCols> r;
         for (int i = 0; i < MaxRrows; ++i) {
@@ -81,10 +93,10 @@ class Matrix {
                 r.p[i][j] = p[i][j] + m.p[i][j];
             }
         }
-        return move(r);
+        return r;
     }
 
-    Matrix<T,MaxRrows,MaxCols> operator-(const Matrix<T,MaxRrows,MaxCols>& m)
+    Matrix<T,MaxRrows,MaxCols,allocSpace> operator-(const Matrix<T,MaxRrows,MaxCols,allocSpace>& m)
     {
         Matrix<T,MaxRrows,MaxCols> r;
         for (int i = 0; i < MaxRrows; ++i) {
@@ -92,11 +104,11 @@ class Matrix {
                 r.p[i][j] = p[i][j] - m.p[i][j];
             }
         }
-        return move(r);
+        return r;
     }
 
     template< int MaxRrows1, int MaxCols1>
-    Matrix<T,MaxRrows,MaxCols> operator*(const Matrix<T,MaxRrows1,MaxCols1>& m)
+    Matrix<T,MaxRrows,MaxCols1,allocSpace> operator*(const Matrix<T,MaxRrows1,MaxCols1,allocSpace>& m)
     {
         Matrix<T,MaxRrows,MaxCols1> r;
         for (int i = 0; i < MaxRrows; ++i) {
@@ -106,15 +118,10 @@ class Matrix {
                 }
             }
         }
-        return move(r);
-    }
-
-    void allocSpace()
-    {
-        p = new T*[MaxRrows];
-        for (int i = 0; i < MaxRrows; ++i) {
-            p[i] = new T[MaxCols];
-        }
+        return r;
     }
 };
+
+
+
 
